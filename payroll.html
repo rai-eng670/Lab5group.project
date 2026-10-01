@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Payroll</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+    <main>
+        <header>
+            <p class="course">I211 · Lab 05</p>
+            <h1>Company Payroll</h1>
+            <p>Employee payments and company invoices</p>
+        </header>
+
+        <section class="summary" aria-label="Payment totals">
+            <div><span>Employees</span><strong>{{ employee_count }}</strong></div>
+            <div><span>Invoices</span><strong>{{ invoice_count }}</strong></div>
+            <div>
+                <span>Total gross</span>
+                <strong>${{ "{:,.2f}".format(total_gross) }}</strong>
+            </div>
+        </section>
+
+        <h2>Payment details</h2>
+        <p class="note">Fictional sample records. Total gross includes all
+            employee payments and invoices.</p>
+        <div class="records">
+            {% for item in payables %}
+            <article class="record">
+                <h3>{{ item.type }}</h3>
+                <dl>
+                    {% if item.type == "Invoice" %}
+                    <div><dt>Part name</dt><dd>{{ item.part_name }}</dd></div>
+                    <div><dt>Quantity</dt><dd>{{ item.quantity }}</dd></div>
+                    <div><dt>Price</dt>
+                        <dd>${{ "{:,.2f}".format(item.price) }}</dd></div>
+                    {% else %}
+                    <div><dt>Employee ID</dt><dd>{{ item.emp_id }}</dd></div>
+                    <div><dt>Name</dt>
+                        <dd>{{ item.first_name }} {{ item.last_name }}</dd></div>
+                    <div><dt>Gender</dt><dd>{{ item.gender }}</dd></div>
+                    <div><dt>SSN</dt><dd>{{ item.ssn }}</dd></div>
+                    <div><dt>Years of service</dt>
+                        <dd>{{ item.years_of_service }}</dd></div>
+
+                    {% if item.type == "Secretary" %}
+                    <div><dt>Hourly wage</dt>
+                        <dd>${{ "{:,.2f}".format(item.wage) }}</dd></div>
+                    <div><dt>Hours</dt><dd>{{ item.hours }}</dd></div>
+                    {% elif item.type == "Sales Person" %}
+                    <div><dt>Sales</dt>
+                        <dd>${{ "{:,.2f}".format(item.sales) }}</dd></div>
+                    <div><dt>Commission rate</dt>
+                        <dd>{{ "{:g}".format(item.commission_rate * 100) }}%</dd>
+                    </div>
+                    {% else %}
+                    <div><dt>Department</dt><dd>{{ item.department }}</dd></div>
+                    <div><dt>Salary</dt>
+                        <dd>${{ "{:,.2f}".format(item.salary) }}</dd></div>
+                    {% if item.type == "Executive Manager" %}
+                    <div><dt>Bonus</dt>
+                        <dd>${{ "{:,.2f}".format(item.bonus) }}</dd></div>
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                    <div class="payment"><dt>Payment amount</dt>
+                        <dd>${{ "{:,.2f}".format(item.payment) }}</dd></div>
+                </dl>
+            </article>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>
